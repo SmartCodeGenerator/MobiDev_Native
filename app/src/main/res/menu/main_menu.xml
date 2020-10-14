@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_page"
+        android:title="Головна сторінка"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/about_page"
+        android:title="Про застосунок"
+        android:orderInCategory="2" />
+    <item
+        android:id="@+id/terms_of_use_page"
+        android:title="Умови використання"
+        android:orderInCategory="3" />
+</menu>

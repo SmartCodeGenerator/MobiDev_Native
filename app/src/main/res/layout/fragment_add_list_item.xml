@@ -24,8 +24,7 @@
         android:layout_height="wrap_content"
         android:text="Опис покупки: "
         android:textSize="25dp"
-        android:layout_marginTop="100dp"
-        android:onClick="focusOnEditor"/>
+        android:layout_marginTop="100dp"/>
 
     <EditText
         android:id="@+id/edit_desc"
@@ -40,8 +39,7 @@
         android:layout_height="wrap_content"
         android:text="Вартість покупки: "
         android:textSize="25dp"
-        android:layout_marginTop="200dp"
-        android:onClick="focusOnEditor"/>
+        android:layout_marginTop="200dp"/>
 
     <EditText
         android:id="@+id/edit_price"
@@ -52,11 +50,11 @@
         android:layout_marginTop="230dp"/>
 
     <Button
+        android:id="@+id/send_item_created_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="додати"
         android:layout_gravity="right"
-        android:layout_marginTop="290dp"
-        android:onClick="sendNewPurchaseData"/>
+        android:layout_marginTop="290dp"/>
 
 </FrameLayout>

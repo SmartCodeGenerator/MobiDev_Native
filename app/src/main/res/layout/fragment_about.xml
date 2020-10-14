@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AboutFragment"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Purchaser"
+        android:textSize="50sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorPrimary"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Навчальна дисципліна:\nРозробка мобільних додатків"
+        android:textSize="25sp"
+        android:layout_marginTop="100dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Викладач:\nОлександр Валер'янович Орловський"
+        android:textSize="25sp"
+        android:layout_marginTop="180dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Тема: Перелік покупок (14)"
+        android:textSize="25sp"
+        android:layout_marginTop="285dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Розробник:\nМитринюк Олександр,\nгрупа 444(2)"
+        android:textSize="25sp"
+        android:layout_marginTop="335dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Версія: 0.3.0"
+        android:textSize="25sp"
+        android:layout_marginTop="440dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Посилання на GitHub:\nhttps://github.com/SmartCodeGenerator/Purchaser.git"
+        android:textSize="25sp"
+        android:layout_marginTop="490dp"/>
+
+</FrameLayout>
