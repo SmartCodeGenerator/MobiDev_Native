@@ -1,35 +1,38 @@
 package edu.chnu.mobidev_native;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
+
+    private PurchaserTimer purchaserTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Timber.i("onCreate called");
+
         setContentView(R.layout.activity_main);
+
+        purchaserTimer = new PurchaserTimer(this.getLifecycle());
+
+        if (savedInstanceState != null) {
+            int value1 = savedInstanceState.getInt("TIMER_TOTAL");
+            int value2 = savedInstanceState.getInt("TIMER_FOCUS");
+
+            purchaserTimer.setSecondsCountTotal(value1);
+            purchaserTimer.setSecondsCountFocused(value2);
+        }
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -61,5 +64,61 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Timber.i("onStart called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Timber.i("onResume called");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Timber.i("onPause called");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Timber.i("onStop called");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Timber.i("onRestart called");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Timber.i("onDestroy called");
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("TIMER_TOTAL", purchaserTimer.getSecondsCountTotal());
+        int value1 = outState.getInt("TIMER_TOTAL");
+        Timber.i("onSaveInstanceState (TIMER_TOTAL): " + value1);
+        outState.putInt("TIMER_FOCUS", purchaserTimer.getSecondsCountFocused());
+        int value2 = outState.getInt("TIMER_FOCUS");
+        Timber.i("onSaveInstanceState (TIMER_FOCUS): " + value2);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        int value1 = savedInstanceState.getInt("TIMER_TOTAL");
+        Timber.i("onRestoreInstanceState (TIMER_TOTAL): " + value1);
+        int value2 = savedInstanceState.getInt("TIMER_FOCUS");
+        Timber.i("onRestoreInstanceState (TIMER_FOCUS): " + value2);
     }
 }

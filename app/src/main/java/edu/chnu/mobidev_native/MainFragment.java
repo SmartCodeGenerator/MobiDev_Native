@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,11 @@ import android.widget.Toast;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +43,7 @@ public class MainFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
+    private ArrayList<String> listsNames;
 
     public MainFragment() {
         // Required empty public constructor
@@ -64,6 +73,11 @@ public class MainFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setRetainInstance(true);
+        listsNames = new ArrayList<>();
+        listsNames.add("list 1");
+        listsNames.add("list 2");
+        listsNames.add("list 3");
     }
 
     @Override
@@ -96,24 +110,148 @@ public class MainFragment extends Fragment {
             }
         });
 
+        LinearLayout listsList = (LinearLayout) view.findViewById(R.id.lists_list);
 
-        newListEditText.setText("list 1");
-        addList(addNewListBtn, view);
-
-        newListEditText.setText("list 2");
-        addList(addNewListBtn, view);
-
-        newListEditText.setText("list 3");
-        addList(addNewListBtn, view);
+        for (String listName : listsNames) {
+            newListEditText.setText(listName);
+            drawList(getContext(), newListEditText, listsList);
+        }
 
         newListEditText.setText("");
 
         return view;
     }
 
+    private String drawList(Context context, EditText newListEditText,
+                          LinearLayout listsList) {
+        final Context ctx = context;
+
+        LinearLayout listItem = new LinearLayout(ctx);
+        listItem.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout.LayoutParams listItemParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        listItemParams.topMargin = 10;
+
+        TextView dateCreatedText = new TextView(ctx);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Kiev"));
+        dateCreatedText.setText(dtf.format(now));
+        dateCreatedText.setTextSize(20);
+
+        LinearLayout.LayoutParams dateCreatedParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        dateCreatedParams.leftMargin = 10;
+
+        listItem.addView(dateCreatedText, dateCreatedParams);
+
+        RelativeLayout infoGroup = new RelativeLayout(ctx);
+        infoGroup.setPadding(10, 0, 10, 0);
+
+        String name = newListEditText.getText().toString();
+
+        final TextView listNameText = new TextView(ctx);
+        listNameText.setTextSize(35);
+        listNameText.setText(name);
+
+        infoGroup.addView(listNameText, new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+        CheckBox statusCheckBox = new CheckBox(ctx);
+        statusCheckBox.setEnabled(false);
+        statusCheckBox.setTextSize(35);
+
+        RelativeLayout.LayoutParams checkParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        checkParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+        infoGroup.addView(statusCheckBox, checkParams);
+
+        listItem.addView(infoGroup, new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+        RelativeLayout actionGroup = new RelativeLayout(ctx);
+        actionGroup.setPadding(0,0,10,0);
+
+        Button delBtn = new Button(ctx);
+        delBtn.setId(Button.generateViewId());
+        delBtn.setText("x");
+        delBtn.setBackgroundColor(Color.RED);
+
+        RelativeLayout.LayoutParams delBtnParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        delBtnParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+        delBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout cnt = (LinearLayout) v.getParent().getParent();
+                String listName = ((TextView) ((RelativeLayout) cnt.getChildAt(1))
+                        .getChildAt(0)).getText().toString();
+
+                ((LinearLayout) v.getParent().getParent().getParent()).removeView(
+                        (View) v.getParent().getParent()
+                );
+
+                Toast.makeText(ctx, listName + " видалено", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        actionGroup.addView(delBtn, delBtnParams);
+
+        Button showBtn = new Button(ctx);
+        showBtn.setText("переглянути");
+
+        RelativeLayout.LayoutParams showBtnParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        showBtnParams.rightMargin = 10;
+        showBtnParams.addRule(RelativeLayout.START_OF, delBtn.getId());
+
+        showBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String listName = ((TextView) ((RelativeLayout) ((LinearLayout) v.getParent()
+                        .getParent()).getChildAt(1)).getChildAt(0)).getText()
+                        .toString();
+
+                ListInfoFragment fragment = new ListInfoFragment();
+                fragment.setListName(listName);
+
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        actionGroup.addView(showBtn, showBtnParams);
+
+        listItem.addView(actionGroup, new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+        listsList.addView(listItem, listItemParams);
+
+        return name;
+    }
 
     private void addList(View view, View container) {
         final Context ctx =  getContext();
+        Timber.i(ctx.toString());
 
         LinearLayout listsList = (LinearLayout) container.findViewById(R.id.lists_list);
         final EditText newListEditText = (EditText) container.findViewById(R.id.new_list_edit_text);
@@ -128,123 +266,9 @@ public class MainFragment extends Fragment {
                 }
             });
         } else {
-            LinearLayout listItem = new LinearLayout(ctx);
-            listItem.setOrientation(LinearLayout.VERTICAL);
+            String name = drawList(ctx, newListEditText, listsList);
 
-            LinearLayout.LayoutParams listItemParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            listItemParams.topMargin = 10;
-
-            TextView dateCreatedText = new TextView(ctx);
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Kiev"));
-            dateCreatedText.setText(dtf.format(now));
-            dateCreatedText.setTextSize(20);
-
-            LinearLayout.LayoutParams dateCreatedParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            dateCreatedParams.leftMargin = 10;
-
-            listItem.addView(dateCreatedText, dateCreatedParams);
-
-            RelativeLayout infoGroup = new RelativeLayout(ctx);
-            infoGroup.setPadding(10, 0, 10, 0);
-
-            final TextView listNameText = new TextView(ctx);
-            listNameText.setTextSize(35);
-            listNameText.setText(newListEditText.getText().toString());
-
-            infoGroup.addView(listNameText, new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            ));
-
-            CheckBox statusCheckBox = new CheckBox(ctx);
-            statusCheckBox.setEnabled(false);
-            statusCheckBox.setTextSize(35);
-
-            RelativeLayout.LayoutParams checkParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            checkParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-            infoGroup.addView(statusCheckBox, checkParams);
-
-            listItem.addView(infoGroup, new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            ));
-
-            RelativeLayout actionGroup = new RelativeLayout(ctx);
-            actionGroup.setPadding(0,0,10,0);
-
-            Button delBtn = new Button(ctx);
-            delBtn.setId(Button.generateViewId());
-            delBtn.setText("x");
-            delBtn.setBackgroundColor(Color.RED);
-
-            RelativeLayout.LayoutParams delBtnParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            delBtnParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-            delBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    LinearLayout cnt = (LinearLayout) v.getParent().getParent();
-                    String listName = ((TextView) ((RelativeLayout) cnt.getChildAt(1))
-                            .getChildAt(0)).getText().toString();
-
-                    ((LinearLayout) v.getParent().getParent().getParent()).removeView(
-                            (View) v.getParent().getParent()
-                    );
-
-                    Toast.makeText(ctx, listName + " видалено", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            actionGroup.addView(delBtn, delBtnParams);
-
-            Button showBtn = new Button(ctx);
-            showBtn.setText("переглянути");
-
-            RelativeLayout.LayoutParams showBtnParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            showBtnParams.rightMargin = 10;
-            showBtnParams.addRule(RelativeLayout.START_OF, delBtn.getId());
-
-            showBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String listName = ((TextView) ((RelativeLayout) ((LinearLayout) v.getParent()
-                            .getParent()).getChildAt(1)).getChildAt(0)).getText()
-                            .toString();
-
-                    ListInfoFragment fragment = new ListInfoFragment();
-                    fragment.setListName(listName);
-
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.main_container, fragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-            });
-
-            actionGroup.addView(showBtn, showBtnParams);
-
-            listItem.addView(actionGroup, new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            ));
-
-            listsList.addView(listItem, listItemParams);
+            listsNames.add(name);
 
             newListEditText.setText("");
 

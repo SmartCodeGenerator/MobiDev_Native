@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.function.Predicate;
 
 import edu.chnu.mobidev_native.models.ListItem;
+import timber.log.Timber;
 
 public class ListInfoFragment extends Fragment {
 
@@ -35,6 +36,7 @@ public class ListInfoFragment extends Fragment {
         listItems = new LinkedList<>();
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        Timber.i("onCreate called");
     }
 
     @Override
@@ -66,7 +68,63 @@ public class ListInfoFragment extends Fragment {
         addItem(view, "item3", 40);
         addItem(view, "item4", 40);
 
+        Timber.i("onCreateView called");
+
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Timber.i("onActivityCreated called");
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Timber.i("onAttach called");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Timber.i("onStart called");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Timber.i("onResume called");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Timber.i("onPause called");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Timber.i("onStop called");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Timber.i("onDestroyView called");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Timber.i("onDestroy called");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Timber.i("onDetach called");
     }
 
     @Override
@@ -187,5 +245,7 @@ public class ListInfoFragment extends Fragment {
             }
         }
     }
+
+
 
 }
