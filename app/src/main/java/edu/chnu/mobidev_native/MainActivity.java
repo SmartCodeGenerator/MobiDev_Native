@@ -9,12 +9,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import edu.chnu.mobidev_native.viewmodels.StartViewModel;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
-    private PurchaserTimer purchaserTimer;
+    private StartViewModel viewModel;
+    private StartViewModelFactory viewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,20 +28,19 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        purchaserTimer = new PurchaserTimer(this.getLifecycle());
+        viewModelFactory = new StartViewModelFactory(getLifecycle());
 
-        if (savedInstanceState != null) {
-            int value1 = savedInstanceState.getInt("TIMER_TOTAL");
-            int value2 = savedInstanceState.getInt("TIMER_FOCUS");
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(StartViewModel.class);
 
-            purchaserTimer.setSecondsCountTotal(value1);
-            purchaserTimer.setSecondsCountFocused(value2);
+        if (!viewModel.getLocked()) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_container, new MainFragment())
+                    .commit();
         }
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.main_container, new MainFragment())
-                .commit();
+        // TODO - чому лише так працює?
+        getLifecycle().addObserver(viewModel);
     }
 
     @Override
@@ -100,25 +103,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Timber.i("onDestroy called");
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("TIMER_TOTAL", purchaserTimer.getSecondsCountTotal());
-        int value1 = outState.getInt("TIMER_TOTAL");
-        Timber.i("onSaveInstanceState (TIMER_TOTAL): " + value1);
-        outState.putInt("TIMER_FOCUS", purchaserTimer.getSecondsCountFocused());
-        int value2 = outState.getInt("TIMER_FOCUS");
-        Timber.i("onSaveInstanceState (TIMER_FOCUS): " + value2);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        int value1 = savedInstanceState.getInt("TIMER_TOTAL");
-        Timber.i("onRestoreInstanceState (TIMER_TOTAL): " + value1);
-        int value2 = savedInstanceState.getInt("TIMER_FOCUS");
-        Timber.i("onRestoreInstanceState (TIMER_FOCUS): " + value2);
     }
 }

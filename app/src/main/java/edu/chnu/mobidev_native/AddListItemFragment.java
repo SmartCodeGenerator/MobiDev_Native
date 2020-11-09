@@ -6,40 +6,48 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
+import edu.chnu.mobidev_native.databinding.FragmentAddListItemBinding;
+import edu.chnu.mobidev_native.viewmodels.SharedViewModel;
 
 public class AddListItemFragment extends Fragment {
 
-    private String listName;
+    private SharedViewModel model;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_add_list_item, container,
-                false);
+        final FragmentAddListItemBinding binding = DataBindingUtil.inflate(inflater,
+                R.layout.fragment_add_list_item, container, false);
 
-        ((TextView) view.findViewById(R.id.add_purchase_header)).setText(listName);
+        model = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-        view.findViewById(R.id.desc_label).setOnClickListener(new View.OnClickListener(){
+        binding.setSharedViewModel(model);
+
+        binding.getRoot().findViewById(R.id.desc_label).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                focusOnEditor(v, view);
+                focusOnEditor(v, binding.getRoot());
             }
         });
 
-        view.findViewById(R.id.price_label).setOnClickListener(new View.OnClickListener(){
+        binding.getRoot().findViewById(R.id.price_label).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                focusOnEditor(v, view);
+                focusOnEditor(v, binding.getRoot());
             }
         });
 
-        view.findViewById(R.id.edit_desc).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        binding.getRoot().findViewById(R.id.edit_desc).setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 final InputMethodManager manager = (InputMethodManager)
@@ -52,7 +60,7 @@ public class AddListItemFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.edit_price).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        binding.getRoot().findViewById(R.id.edit_price).setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 final InputMethodManager manager = (InputMethodManager)
@@ -65,18 +73,14 @@ public class AddListItemFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.send_item_created_btn).setOnClickListener(new View.OnClickListener(){
+        binding.getRoot().findViewById(R.id.send_item_created_btn).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                sendNewPurchaseData(v, view);
+                sendNewPurchaseData(v, binding.getRoot());
             }
         });
 
-        return view;
-    }
-
-    public void setListName(String listName) {
-        this.listName = listName;
+        return binding.getRoot();
     }
 
     private  void focusOnEditor(View view, View container) {
@@ -103,7 +107,6 @@ public class AddListItemFragment extends Fragment {
             }
         } else {
             ListInfoFragment fragment = new ListInfoFragment();
-            fragment.setListName(listName);
 
             getActivity().getSupportFragmentManager()
                     .beginTransaction()

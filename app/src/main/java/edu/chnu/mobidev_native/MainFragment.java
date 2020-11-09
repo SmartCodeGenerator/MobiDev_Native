@@ -2,13 +2,11 @@ package edu.chnu.mobidev_native;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.os.Parcelable;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,63 +19,34 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.AbstractMap;
 import java.util.LinkedList;
-import java.util.List;
 
+import edu.chnu.mobidev_native.models.ShoppingList;
+import edu.chnu.mobidev_native.viewmodels.ListViewModel;
+import edu.chnu.mobidev_native.viewmodels.SharedViewModel;
 import timber.log.Timber;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MainFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-    private ArrayList<String> listsNames;
+    private ListViewModel viewModel;
+    private SharedViewModel model;
 
     public MainFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        setRetainInstance(true);
-        listsNames = new ArrayList<>();
-        listsNames.add("list 1");
-        listsNames.add("list 2");
-        listsNames.add("list 3");
     }
 
     @Override
@@ -101,6 +70,11 @@ public class MainFragment extends Fragment {
             }
         });
 
+        Timber.i("called ViewModelProviders.of!");
+
+        viewModel = ViewModelProviders.of(this).get(ListViewModel.class);
+        model = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
         Button addNewListBtn = (Button) view.findViewById(R.id.add_new_list_btn);
         addNewListBtn.setOnClickListener(new Button.OnClickListener(){
 
@@ -110,20 +84,50 @@ public class MainFragment extends Fragment {
             }
         });
 
-        LinearLayout listsList = (LinearLayout) view.findViewById(R.id.lists_list);
+        final LinearLayout listsList = (LinearLayout) view.findViewById(R.id.lists_list);
 
-        for (String listName : listsNames) {
-            newListEditText.setText(listName);
-            drawList(getContext(), newListEditText, listsList);
-        }
+        viewModel.getShoppingLists().observe(getViewLifecycleOwner(),
+                new Observer<LinkedList<ShoppingList>>() {
+            @Override
+            public void onChanged(LinkedList<ShoppingList> shoppingLists) {
+                listsList.removeAllViews();
+                for (ShoppingList data : shoppingLists) {
+                    drawList(data, getContext(), listsList);
+                }
+            }
+        });
+
+        viewModel.getListDeleted().observe(getViewLifecycleOwner(),
+                new Observer<AbstractMap.SimpleEntry<String, Boolean>>() {
+            @Override
+            public void onChanged(AbstractMap
+                                          .SimpleEntry<String, Boolean> listDeletedInfo) {
+                if (listDeletedInfo.getValue()) {
+                    listDeleted(listDeletedInfo.getKey());
+                    viewModel.onListDeleted();
+                }
+            }
+        });
 
         newListEditText.setText("");
 
         return view;
     }
 
-    private String drawList(Context context, EditText newListEditText,
-                          LinearLayout listsList) {
+    private void listDeleted(String listName) {
+        Vibrator buzzer = requireActivity().getSystemService(Vibrator.class);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            buzzer.vibrate(VibrationEffect.createWaveform(ListViewModel.BUZZ_PATTERN, -1));
+        } else {
+            buzzer.vibrate(ListViewModel.BUZZ_PATTERN, -1);
+        }
+
+        Toast.makeText(getContext(), listName + " видалено", Toast.LENGTH_SHORT).show();
+    }
+
+    private void drawList(ShoppingList data, Context context, LinearLayout listsList) {
+        final String listName = data.getListName();
         final Context ctx = context;
 
         LinearLayout listItem = new LinearLayout(ctx);
@@ -136,8 +140,7 @@ public class MainFragment extends Fragment {
 
         TextView dateCreatedText = new TextView(ctx);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Kiev"));
-        dateCreatedText.setText(dtf.format(now));
+        dateCreatedText.setText(dtf.format(data.getTimeCreated()));
         dateCreatedText.setTextSize(20);
 
         LinearLayout.LayoutParams dateCreatedParams = new LinearLayout.LayoutParams(
@@ -150,11 +153,9 @@ public class MainFragment extends Fragment {
         RelativeLayout infoGroup = new RelativeLayout(ctx);
         infoGroup.setPadding(10, 0, 10, 0);
 
-        String name = newListEditText.getText().toString();
-
         final TextView listNameText = new TextView(ctx);
         listNameText.setTextSize(35);
-        listNameText.setText(name);
+        listNameText.setText(listName);
 
         infoGroup.addView(listNameText, new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -163,6 +164,7 @@ public class MainFragment extends Fragment {
 
         CheckBox statusCheckBox = new CheckBox(ctx);
         statusCheckBox.setEnabled(false);
+        statusCheckBox.setChecked(data.isCompleted());
         statusCheckBox.setTextSize(35);
 
         RelativeLayout.LayoutParams checkParams = new RelativeLayout.LayoutParams(
@@ -195,15 +197,9 @@ public class MainFragment extends Fragment {
         delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinearLayout cnt = (LinearLayout) v.getParent().getParent();
-                String listName = ((TextView) ((RelativeLayout) cnt.getChildAt(1))
-                        .getChildAt(0)).getText().toString();
-
-                ((LinearLayout) v.getParent().getParent().getParent()).removeView(
-                        (View) v.getParent().getParent()
-                );
-
-                Toast.makeText(ctx, listName + " видалено", Toast.LENGTH_SHORT).show();
+                if (viewModel.getShoppingLists() != null) {
+                    viewModel.removeList(listName);
+                }
             }
         });
 
@@ -222,12 +218,9 @@ public class MainFragment extends Fragment {
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String listName = ((TextView) ((RelativeLayout) ((LinearLayout) v.getParent()
-                        .getParent()).getChildAt(1)).getChildAt(0)).getText()
-                        .toString();
-
                 ListInfoFragment fragment = new ListInfoFragment();
-                fragment.setListName(listName);
+
+                model.setSelectedList(listName);
 
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
@@ -245,15 +238,12 @@ public class MainFragment extends Fragment {
         ));
 
         listsList.addView(listItem, listItemParams);
-
-        return name;
     }
 
     private void addList(View view, View container) {
         final Context ctx =  getContext();
         Timber.i(ctx.toString());
 
-        LinearLayout listsList = (LinearLayout) container.findViewById(R.id.lists_list);
         final EditText newListEditText = (EditText) container.findViewById(R.id.new_list_edit_text);
 
         if (newListEditText.getText().toString().trim().length() == 0) {
@@ -266,9 +256,8 @@ public class MainFragment extends Fragment {
                 }
             });
         } else {
-            String name = drawList(ctx, newListEditText, listsList);
-
-            listsNames.add(name);
+            viewModel.addList(newListEditText.getText().toString(),
+                    false, LocalDateTime.now(ZoneId.of("Europe/Kiev")));
 
             newListEditText.setText("");
 

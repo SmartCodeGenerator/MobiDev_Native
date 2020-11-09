@@ -1,60 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
-
-    <TextView
-        android:id="@+id/add_purchase_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="List_name"
-        android:textSize="45dp"
-        android:layout_gravity="center_horizontal"/>
-
-    <View
+<layout>
+    <data>
+        <variable
+            name="sharedViewModel"
+            type="edu.chnu.mobidev_native.viewmodels.SharedViewModel" />
+    </data>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#000000"
-        android:layout_marginTop="70dp"/>
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/desc_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Опис покупки: "
-        android:textSize="25dp"
-        android:layout_marginTop="100dp"/>
+        <TextView
+            android:id="@+id/add_purchase_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{sharedViewModel.selectedList}"
+            android:textSize="45dp"
+            android:layout_gravity="center_horizontal"/>
 
-    <EditText
-        android:id="@+id/edit_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:layout_marginTop="130dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#000000"
+            android:layout_marginTop="70dp"/>
 
-    <TextView
-        android:id="@+id/price_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Вартість покупки: "
-        android:textSize="25dp"
-        android:layout_marginTop="200dp"/>
+        <TextView
+            android:id="@+id/desc_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Опис покупки: "
+            android:textSize="25dp"
+            android:layout_marginTop="100dp"/>
 
-    <EditText
-        android:id="@+id/edit_price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:inputType="numberDecimal"
-        android:layout_marginTop="230dp"/>
+        <EditText
+            android:id="@+id/edit_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:layout_marginTop="130dp"/>
 
-    <Button
-        android:id="@+id/send_item_created_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="додати"
-        android:layout_gravity="right"
-        android:layout_marginTop="290dp"/>
+        <TextView
+            android:id="@+id/price_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Вартість покупки: "
+            android:textSize="25dp"
+            android:layout_marginTop="200dp"/>
 
-</FrameLayout>
+        <EditText
+            android:id="@+id/edit_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:inputType="numberDecimal"
+            android:layout_marginTop="230dp"/>
+
+        <Button
+            android:id="@+id/send_item_created_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="додати"
+            android:layout_gravity="right"
+            android:layout_marginTop="290dp"/>
+
+    </FrameLayout>
+</layout>

@@ -18,22 +18,29 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import java.util.LinkedList;
-import java.util.function.Predicate;
+import java.util.Objects;
 
+import edu.chnu.mobidev_native.databinding.FragmentListInfoBinding;
 import edu.chnu.mobidev_native.models.ListItem;
+import edu.chnu.mobidev_native.viewmodels.ListInfoViewModel;
+import edu.chnu.mobidev_native.viewmodels.SharedViewModel;
 import timber.log.Timber;
 
 public class ListInfoFragment extends Fragment {
 
-    private String listName;
-    private LinkedList<ListItem> listItems;
+    private ListInfoViewModel viewModel;
+    private SharedViewModel model;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        listItems = new LinkedList<>();
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         Timber.i("onCreate called");
@@ -42,18 +49,22 @@ public class ListInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final FragmentListInfoBinding binding = DataBindingUtil.inflate(inflater,
+                R.layout.fragment_list_info, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_list_info, container, false);
+        viewModel = ViewModelProviders.of(this).get(ListInfoViewModel.class);
+        model = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-        Button addListItemBtn = (Button) view.findViewById(R.id.add_list_item_btn);
+        binding.setListInfoViewModel(viewModel);
+
+        Button addListItemBtn = (Button) binding.getRoot().findViewById(R.id.add_list_item_btn);
 
         addListItemBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddListItemFragment fragment = new AddListItemFragment();
-                fragment.setListName(listName);
 
-                getActivity().getSupportFragmentManager()
+                requireActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_container, fragment)
                         .addToBackStack(null)
@@ -61,16 +72,25 @@ public class ListInfoFragment extends Fragment {
             }
         });
 
-        ((TextView) view.findViewById(R.id.list_info_header)).setText(listName);
+        viewModel.getListItems().observe(getViewLifecycleOwner(),
+                new Observer<LinkedList<ListItem>>() {
+            @Override
+            public void onChanged(LinkedList<ListItem> listItems) {
+                LinearLayout container = binding.getRoot().findViewById(R.id.list_items);
+                container.removeAllViews();
 
-        addItem(view, "item1", 40);
-        addItem(view, "item2", 40);
-        addItem(view, "item3", 40);
-        addItem(view, "item4", 40);
+                for (ListItem item : Objects.requireNonNull(viewModel.getListItems().getValue())) {
+                    drawItem(container, item.getUid(), item.getDescription(), item.getPrice(),
+                            item.isChecked());
+                }
+            }
+        });
+
+        binding.setSharedViewModel(model);
 
         Timber.i("onCreateView called");
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -139,14 +159,8 @@ public class ListInfoFragment extends Fragment {
             case R.id.share_list_info:
 
                 StringBuilder info = new StringBuilder();
-                info.append(listName + ":\n\n");
 
-                for(ListItem listItem : listItems) {
-                    info.append(String.format("%10s: %10.3f " +
-                            (listItem.isChecked() ? "\u2713" : "") + "\n",
-                            listItem.getDescription(),
-                            listItem.getPrice()));
-                }
+                viewModel.collectInfo(model.getSelectedList().getValue(), info);
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
@@ -161,11 +175,8 @@ public class ListInfoFragment extends Fragment {
         }
     }
 
-    public void setListName(String listName) {
-        this.listName = listName;
-    }
-
-    private void addItem(View container, String desc, float price) {
+    private void drawItem(LinearLayout container, int itemId, String desc, float price,
+                          boolean isChecked) {
         Context ctx = getContext();
         RelativeLayout item = new RelativeLayout(ctx);
         item.setPadding(16,16,16,16);
@@ -176,8 +187,12 @@ public class ListInfoFragment extends Fragment {
         );
 
         CheckBox itemCheckBox = new CheckBox(ctx);
-        itemCheckBox.setId(CheckBox.generateViewId());
+        itemCheckBox.setId(itemId);
         itemCheckBox.setText(desc);
+        itemCheckBox.setChecked(isChecked);
+        if (isChecked) {
+            itemCheckBox.setTextColor(Color.GREEN);
+        }
         itemCheckBox.setTextSize(35);
 
         itemCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -208,9 +223,7 @@ public class ListInfoFragment extends Fragment {
 
         item.addView(priceText, priceTextParams);
 
-        ((LinearLayout) container.findViewById(R.id.list_items)).addView(item, itemParams);
-
-        listItems.add(new ListItem(itemCheckBox.getId(), desc, price, false));
+        container.addView(item, itemParams);
     }
 
     private void checkItem(View view) {
@@ -221,12 +234,7 @@ public class ListInfoFragment extends Fragment {
             target.setTextColor(Color.GREEN);
             ((TextView) ((RelativeLayout) view.getParent()).getChildAt(1))
                     .setTextColor(Color.GREEN);
-            ListItem targetItem = listItems.stream().filter(new Predicate<ListItem>() {
-                @Override
-                public boolean test(ListItem i) {
-                    return i.getItemId() == target.getId();
-                }
-            }).findAny().orElse(null);
+            ListItem targetItem = viewModel.getById(target.getId());
             if (targetItem != null) {
                 targetItem.setChecked(true);
             }
@@ -234,18 +242,11 @@ public class ListInfoFragment extends Fragment {
             target.setTextColor(Color.BLACK);
             ((TextView) ((RelativeLayout) view.getParent()).getChildAt(1))
                     .setTextColor(Color.GRAY);
-            ListItem targetItem = listItems.stream().filter(new Predicate<ListItem>() {
-                @Override
-                public boolean test(ListItem i) {
-                    return i.getItemId() == target.getId();
-                }
-            }).findAny().orElse(null);
+            ListItem targetItem = viewModel.getById(target.getId());
             if (targetItem != null) {
                 targetItem.setChecked(false);
             }
         }
     }
-
-
 
 }

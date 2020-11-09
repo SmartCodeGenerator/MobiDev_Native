@@ -1,24 +1,15 @@
 package edu.chnu.mobidev_native.models;
 
 public class ListItem {
-    private int itemId;
+    private int uid;
     private String description;
     private float price;
     private boolean isChecked;
 
-    public ListItem(int itemId, String description, float price, boolean isChecked) {
-        this.itemId = itemId;
+    public ListItem(String description, float price, boolean isChecked) {
         this.description = description;
         this.price = price;
         this.setChecked(isChecked);
-    }
-
-    public int getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
     }
 
     public String getDescription() {
@@ -43,5 +34,13 @@ public class ListItem {
 
     public void setChecked(boolean checked) {
         isChecked = checked;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 }
