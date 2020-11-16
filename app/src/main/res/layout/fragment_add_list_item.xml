@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="sharedViewModel"
-            type="edu.chnu.mobidev_native.viewmodels.SharedViewModel" />
+            name="listInfoViewModel"
+            type="edu.chnu.mobidev_native.viewmodel.listinfo.ListInfoViewModel" />
     </data>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp">
 
+        <!-- TODO replace text with list name -->
         <TextView
             android:id="@+id/add_purchase_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{sharedViewModel.selectedList}"
-            android:textSize="45dp"
+            android:text='@{listInfoViewModel != null ? listInfoViewModel.listItems.shoppingList.listName : "not found"}'
+            android:textSize="45sp"
             android:layout_gravity="center_horizontal"/>
 
         <View
@@ -28,40 +30,46 @@
             android:id="@+id/desc_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Опис покупки: "
-            android:textSize="25dp"
+            android:text="@string/desc_label_text"
+            android:textSize="25sp"
             android:layout_marginTop="100dp"/>
 
         <EditText
             android:id="@+id/edit_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:layout_marginTop="130dp"/>
+            android:textSize="25sp"
+            android:layout_marginTop="130dp"
+            android:inputType="text"
+            android:importantForAutofill="no"
+            tools:ignore="labelFor"/>
 
         <TextView
             android:id="@+id/price_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Вартість покупки: "
-            android:textSize="25dp"
+            android:text="@string/price_label_text"
+            android:textSize="25sp"
             android:layout_marginTop="200dp"/>
 
         <EditText
             android:id="@+id/edit_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:inputType="numberDecimal"
-            android:layout_marginTop="230dp"/>
+            android:layout_marginTop="230dp"
+            android:importantForAutofill="no"
+            tools:ignore="labelFor"/>
 
         <Button
             android:id="@+id/send_item_created_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="додати"
+            android:text="@string/send_item_created_btn"
             android:layout_gravity="right"
-            android:layout_marginTop="290dp"/>
+            android:layout_marginTop="290dp"
+            tools:ignore="rtlHardCoded"/>
 
     </FrameLayout>
 </layout>

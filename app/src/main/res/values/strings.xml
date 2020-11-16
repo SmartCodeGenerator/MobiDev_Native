@@ -11,4 +11,36 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="list_info_total_anchor_text">Всього:</string>
+    <string name="add_list_item_btn_text">додати</string>
+    <string name="price_label_text">Вартість покупки:</string>
+    <string name="desc_label_text">Опис покупки:</string>
+    <string name="send_item_created_btn">додати</string>
+    <string name="about_header">Purchaser</string>
+    <string name="about_discipline_text">Навчальна дисципліна:<br/>
+        Розробка мобільних додатків</string>
+    <string name="teacher_name_text">Викладач:<br/>Олександр Валер\&apos;янович Орловський</string>
+    <string name="project_topic_text">Тема: Перелік покупок (14)</string>
+    <string name="developer_name_text">Розробник:<br/>Митринюк Олександр,<br/>група 444(2)</string>
+    <string name="project_version_text">Версія: 0.3.0</string>
+    <string name="github_link">Посилання на GitHub:
+        <br/>https://github.com/SmartCodeGenerator/Purchaser.git</string>
+    <string name="share_list_info_title">Поділитись</string>
+    <string name="main_page_title">Головна сторінка</string>
+    <string name="about_page_title">Про застосунок</string>
+    <string name="terms_of_use_page_title">Умови використання</string>
+    <string name="new_list_edit_text_text">Введіть назву нового списку</string>
+    <string name="add_new_list_btn_text">Додати</string>
+    <string name="terms_of_use_header">Умови використання</string>
+    <string name="term1_text">1. Ваш доступ до застосунку і його використання означає Вашу згоду
+        бути обмеженим дією даних Умов використання.</string>
+    <string name="term2_text">2. Даний застосунок працює as is and as available, тобто таким, яким
+        Ви його зараз бачите та який для Вас доступний.</string>
+    <string name="term3_text">3. Розробник надає користувачу обмежену, невиключну, з можливістю
+        відклику і без права субліцензіювання ліцензію на доступ і використання даного застосунку
+        на пристроях користувачів, а також на використання будь-якого контенту, на даному застосунку
+        в некомерційних цілях.</string>
+    <string name="term4_text">4. Всі сервіси і права на них є і повинні залишатися власністю
+        Розробника.</string>
+    <string name="no_lists_text">Створіть список покупок, натиснувши на кнопку ДОДАТИ</string>
 </resources>

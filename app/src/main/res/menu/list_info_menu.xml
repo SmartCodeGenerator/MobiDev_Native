@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/share_list_info"
-        android:title="Поділитись"
+        android:title="@string/share_list_info_title"
         android:orderInCategory="4" />
 </menu>

@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/main_page"
-        android:title="Головна сторінка"
+        android:title="@string/main_page_title"
         android:orderInCategory="1" />
     <item
         android:id="@+id/about_page"
-        android:title="Про застосунок"
+        android:title="@string/about_page_title"
         android:orderInCategory="2" />
     <item
         android:id="@+id/terms_of_use_page"
-        android:title="Умови використання"
+        android:title="@string/terms_of_use_page_title"
         android:orderInCategory="3" />
 </menu>

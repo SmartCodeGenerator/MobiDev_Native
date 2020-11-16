@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TermsOfUseFragment"
+    tools:context=".view.fragment.termsofuse.TermsOfUseFragment"
     android:paddingLeft="25dp"
     android:paddingRight="25dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Умови використання"
+        android:text="@string/terms_of_use_header"
         android:textSize="50sp"
         android:gravity="center_horizontal"
         android:layout_marginTop="20dp"
@@ -19,28 +19,28 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="1. Ваш доступ до застосунку і його використання означає Вашу згоду бути обмеженим дією даних Умов використання."
+        android:text="@string/term1_text"
         android:textSize="25sp"
         android:layout_marginTop="170dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="2. Даний застосунок працює as is and as available, тобто таким, яким Ви його зараз бачите та який для Вас доступний."
+        android:text="@string/term2_text"
         android:textSize="25sp"
         android:layout_marginTop="305dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="3. Розробник надає користувачу обмежену, невиключну, з можливістю відклику і без права субліцензіювання ліцензію на доступ і використання даного застосунку на пристроях користувачів, а також на використання будь-якого контенту, на даному застосунку в некомерційних цілях."
+        android:text="@string/term3_text"
         android:textSize="25sp"
         android:layout_marginTop="440dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="4. Всі сервіси і права на них є і повинні залишатися власністю Розробника."
+        android:text="@string/term4_text"
         android:textSize="25sp"
         android:layout_marginTop="750dp"/>
 
