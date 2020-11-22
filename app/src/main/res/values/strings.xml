@@ -43,4 +43,6 @@
     <string name="term4_text">4. Всі сервіси і права на них є і повинні залишатися власністю
         Розробника.</string>
     <string name="no_lists_text">Створіть список покупок, натиснувши на кнопку ДОДАТИ</string>
+    <string name="delete_list_button_text">x</string>
+    <string name="show_list_button_text">переглянути</string>
 </resources>

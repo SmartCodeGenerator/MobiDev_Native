@@ -8,19 +8,21 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 public class StartViewModel extends ViewModel implements LifecycleObserver {
 
-    private MutableLiveData<Boolean> isLocked;
+    private final MutableLiveData<Boolean> isLocked;
 
-    private MutableLiveData<Integer> secondsCountFocused;
-    private MutableLiveData<Integer> secondsCountTotal;
-    private MutableLiveData<Handler> handler;
-    private MutableLiveData<Runnable> runnableFocused;
-    private MutableLiveData<Runnable> runnableTotal;
+    private final MutableLiveData<Integer> secondsCountFocused;
+    private final MutableLiveData<Integer> secondsCountTotal;
+    private final MutableLiveData<Handler> handler;
+    private final MutableLiveData<Runnable> runnableFocused;
+    private final MutableLiveData<Runnable> runnableTotal;
 
-    public  StartViewModel(Lifecycle lifecycle) {
+    public  StartViewModel() {
         isLocked = new MutableLiveData<>();
         isLocked.setValue(false);
 
@@ -35,8 +37,6 @@ public class StartViewModel extends ViewModel implements LifecycleObserver {
 
         runnableFocused = new MutableLiveData<>();
         runnableTotal = new MutableLiveData<>();
-
-        //lifecycle.addObserver(this);
     }
 
     public boolean getLocked() {
@@ -60,12 +60,13 @@ public class StartViewModel extends ViewModel implements LifecycleObserver {
         };
 
         runnableTotal.setValue(timer);
-        handler.getValue().postDelayed(runnableTotal.getValue(), 1000);
+        Objects.requireNonNull(handler.getValue())
+                .postDelayed(runnableTotal.getValue(), 1000);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private void stopTimerTotal() {
-        handler.getValue().removeCallbacks(runnableTotal.getValue());
+        Objects.requireNonNull(handler.getValue()).removeCallbacks(runnableTotal.getValue());
         float focusPercentage = (float) secondsCountFocused.getValue() /
                 secondsCountTotal.getValue() * 100;
         Timber.i("%d/%d секунд - час роботи додатку. %.2f%c - додаток був у фокусі.",
@@ -80,16 +81,18 @@ public class StartViewModel extends ViewModel implements LifecycleObserver {
             public void run() {
                 secondsCountFocused.setValue(secondsCountFocused.getValue() + 1);
                 Timber.i("Timer (focused) is at: %s", secondsCountFocused.getValue());
-                handler.getValue().postDelayed(runnableFocused.getValue(), 1000);
+                Objects.requireNonNull(handler.getValue())
+                        .postDelayed(runnableFocused.getValue(), 1000);
             }
         };
 
         runnableFocused.setValue(timer);
-        handler.getValue().postDelayed(runnableFocused.getValue(), 1000);
+        Objects.requireNonNull(handler.getValue())
+                .postDelayed(runnableFocused.getValue(), 1000);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     private void stopTimerFocused() {
-        handler.getValue().removeCallbacks(runnableFocused.getValue());
+        Objects.requireNonNull(handler.getValue()).removeCallbacks(runnableFocused.getValue());
     }
 }

@@ -18,7 +18,7 @@ public class ListInfoViewModel extends AndroidViewModel {
     private final ListItemRepository repository;
     private final ShoppingListRepository shoppingListRepository;
 
-    private LiveData<ListWithItems> listItems;
+    private LiveData<ListWithItems> listWithItems;
 
     public ListInfoViewModel(Application application) {
         super(application);
@@ -27,14 +27,14 @@ public class ListInfoViewModel extends AndroidViewModel {
     }
 
     public void fetchData(int ownerId) {
-        listItems = repository.getListItems(ownerId);
+        listWithItems = repository.getListItems(ownerId);
     }
 
     public void collectInfo(StringBuilder info) {
-        info.append(Objects.requireNonNull(listItems.getValue())
+        info.append(Objects.requireNonNull(listWithItems.getValue())
                 .shoppingList.getListName()).append(":\n\n");
 
-        for(ListItem listItem : listItems.getValue().listItems) {
+        for (ListItem listItem : Objects.requireNonNull(listWithItems.getValue().listItems)) {
             info.append(String.format("%10s: %10.3f " +
                             (listItem.isChecked() ? "\u2713" : "") + "\n",
                     listItem.getDescription(),
@@ -44,16 +44,16 @@ public class ListInfoViewModel extends AndroidViewModel {
 
     public String getCalculatedTotalPrice() {
         float sum = 0;
-        if (listItems.getValue() != null && listItems.getValue().listItems != null) {
-            for (ListItem item : listItems.getValue().listItems) {
+        if (listWithItems.getValue() != null && listWithItems.getValue().listItems != null) {
+            for (ListItem item : listWithItems.getValue().listItems) {
                 sum += item.getPrice();
             }
         }
         return String.valueOf(sum);
     }
 
-    public LiveData<ListWithItems> getListItems() {
-        return listItems;
+    public LiveData<ListWithItems> getListWithItems() {
+        return listWithItems;
     }
 
     public void insertItem(ListItem item) {
@@ -63,17 +63,17 @@ public class ListInfoViewModel extends AndroidViewModel {
     public void updateItem(ListItem item) {
         repository.update(item);
 
-        if (listItems.getValue() != null && listItems.getValue().listItems != null) {
-            int itemsSize = listItems.getValue().listItems.size();
+        if (listWithItems.getValue() != null && listWithItems.getValue().listItems != null) {
+            int itemsSize = listWithItems.getValue().listItems.size();
             int completedCounter = 0;
 
-            for (ListItem listItem : listItems.getValue().listItems) {
+            for (ListItem listItem : listWithItems.getValue().listItems) {
                 if (listItem.isChecked()) {
                     completedCounter++;
                 }
             }
 
-            ShoppingList owner = listItems.getValue().shoppingList;
+            ShoppingList owner = Objects.requireNonNull(listWithItems.getValue()).shoppingList;
             owner.setCompleted(completedCounter == itemsSize);
             shoppingListRepository.update(owner);
         }

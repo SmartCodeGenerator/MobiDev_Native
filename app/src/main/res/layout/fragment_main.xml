@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="listViewModel"
@@ -34,21 +35,13 @@
             android:layout_marginStart="15dp"
             android:layout_alignBaseline="@id/new_list_edit_text"/>
 
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shopping_lists_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/new_list_edit_text"
-            android:layout_marginTop="20dp">
-
-            <LinearLayout
-                android:id="@+id/lists_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            </LinearLayout>
-
-        </ScrollView>
+            android:layout_marginTop="20dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <TextView
             android:layout_width="match_parent"

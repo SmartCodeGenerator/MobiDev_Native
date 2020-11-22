@@ -11,12 +11,11 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <!-- TODO replace text with list name -->
         <TextView
             android:id="@+id/add_purchase_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{listInfoViewModel != null ? listInfoViewModel.listItems.shoppingList.listName : "not found"}'
+            android:text='@{listInfoViewModel != null ? listInfoViewModel.listWithItems.shoppingList.listName : "not found"}'
             android:textSize="45sp"
             android:layout_gravity="center_horizontal"/>
 

@@ -10,6 +10,7 @@ import java.util.List;
 import edu.chnu.mobidev_native.model.dao.BaseDao;
 import edu.chnu.mobidev_native.model.entity.listitem.ListItem;
 import edu.chnu.mobidev_native.model.entity.relation.ListWithItems;
+import edu.chnu.mobidev_native.model.entity.shoppinglist.ShoppingList;
 
 @Dao
 public interface ListItemDao extends BaseDao<ListItem> {

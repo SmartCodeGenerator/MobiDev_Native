@@ -2,7 +2,6 @@ package edu.chnu.mobidev_native.view.fragment.listinfo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,9 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,17 +17,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
-import java.util.Objects;
-
 import edu.chnu.mobidev_native.R;
 import edu.chnu.mobidev_native.databinding.FragmentListInfoBinding;
 import edu.chnu.mobidev_native.model.entity.listitem.ListItem;
+import edu.chnu.mobidev_native.util.listitem.ListItemDiffCallback;
+import edu.chnu.mobidev_native.util.listitem.ListItemViewHolderOnClickListenerUtils;
+import edu.chnu.mobidev_native.view.adapter.listinfo.ListItemAdapter;
 import edu.chnu.mobidev_native.view.fragment.addlistitem.AddListItemFragment;
 import edu.chnu.mobidev_native.viewmodel.listinfo.ListInfoViewModel;
 import edu.chnu.mobidev_native.viewmodel.listinfo.factory.ListInfoViewModelFactory;
@@ -80,14 +75,13 @@ public class ListInfoFragment extends Fragment {
                     .commit();
         });
 
-        viewModel.getListItems().observe(getViewLifecycleOwner(), listWithItems -> {
-            LinearLayout container1 = binding.getRoot().findViewById(R.id.list_items);
-            container1.removeAllViews();
+        ListItemAdapter adapter = new ListItemAdapter(new ListItemDiffCallback(),
+                new ListItemViewHolderOnClickListenerUtils(viewModel));
 
-            for (ListItem item : Objects
-                    .requireNonNull(listWithItems.listItems)) {
-                drawItem(container1, item);
-            }
+        binding.listItemsList.setAdapter(adapter);
+
+        viewModel.getListWithItems().observe(getViewLifecycleOwner(), listWithItems -> {
+            adapter.submitList(listWithItems.listItems);
 
             ((TextView) binding.getRoot().findViewById(R.id.list_info_total))
                     .setText(viewModel.getCalculatedTotalPrice());
@@ -183,53 +177,4 @@ public class ListInfoFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void drawItem(LinearLayout container, ListItem listItem) {
-        Context ctx = getContext();
-        RelativeLayout item = new RelativeLayout(ctx);
-        item.setPadding(16,16,16,16);
-
-        RelativeLayout.LayoutParams itemParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-
-        CheckBox itemCheckBox = new CheckBox(ctx);
-        itemCheckBox.setId(listItem.getId());
-        itemCheckBox.setText(listItem.getDescription());
-        itemCheckBox.setChecked(listItem.isChecked());
-        if (listItem.isChecked()) {
-            itemCheckBox.setTextColor(Color.GREEN);
-        }
-        itemCheckBox.setTextSize(35);
-
-        itemCheckBox.setOnClickListener(v -> {
-            listItem.setChecked(!listItem.isChecked());
-            viewModel.updateItem(listItem);
-        });
-
-        RelativeLayout.LayoutParams itemCheckBoxParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        itemCheckBoxParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-
-        item.addView(itemCheckBox, itemCheckBoxParams);
-
-        TextView priceText = new TextView(ctx);
-        String priceStr = String
-                .format(Locale.getDefault(), "%.2f грн", listItem.getPrice());
-        priceText.setText(priceStr);
-        priceText.setTextSize(30);
-
-        RelativeLayout.LayoutParams priceTextParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        priceTextParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        priceTextParams.addRule(RelativeLayout.ALIGN_BASELINE, itemCheckBox.getId());
-
-        item.addView(priceText, priceTextParams);
-
-        container.addView(item, itemParams);
-    }
 }

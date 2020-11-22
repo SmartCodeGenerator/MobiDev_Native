@@ -1,5 +1,6 @@
 package edu.chnu.mobidev_native.view.activity.main;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,15 +13,11 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.chnu.mobidev_native.view.fragment.about.AboutFragment;
 import edu.chnu.mobidev_native.view.fragment.main.MainFragment;
 import edu.chnu.mobidev_native.R;
-import edu.chnu.mobidev_native.viewmodel.util.factory.StartViewModelFactory;
 import edu.chnu.mobidev_native.view.fragment.termsofuse.TermsOfUseFragment;
 import edu.chnu.mobidev_native.viewmodel.util.StartViewModel;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
-
-    private StartViewModel viewModel;
-    private StartViewModelFactory viewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        viewModelFactory = new StartViewModelFactory(getLifecycle());
-
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(StartViewModel.class);
+        StartViewModel viewModel = new ViewModelProvider(this).get(StartViewModel.class);
 
         if (!viewModel.getLocked()) {
             getSupportFragmentManager()
@@ -41,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        // TODO - чому лише так працює?
         getLifecycle().addObserver(viewModel);
     }
 
@@ -51,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();

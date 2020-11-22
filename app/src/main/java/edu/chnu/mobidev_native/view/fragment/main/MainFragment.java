@@ -1,7 +1,6 @@
 package edu.chnu.mobidev_native.view.fragment.main;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -10,11 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
@@ -31,8 +26,9 @@ import java.util.Objects;
 
 import edu.chnu.mobidev_native.R;
 import edu.chnu.mobidev_native.databinding.FragmentMainBinding;
-import edu.chnu.mobidev_native.model.entity.shoppinglist.ShoppingList;
-import edu.chnu.mobidev_native.view.fragment.listinfo.ListInfoFragment;
+import edu.chnu.mobidev_native.util.shoppinglist.ShoppingListDiffCallback;
+import edu.chnu.mobidev_native.util.shoppinglist.ShoppingListViewHolderOnClickListenerUtils;
+import edu.chnu.mobidev_native.view.adapter.shoppinglist.ShoppingListAdapter;
 import edu.chnu.mobidev_native.viewmodel.list.ListViewModel;
 import edu.chnu.mobidev_native.viewmodel.list.factory.ListViewModelFactory;
 import edu.chnu.mobidev_native.viewmodel.util.SharedViewModel;
@@ -88,13 +84,16 @@ public class MainFragment extends Fragment {
         Button addNewListBtn = binding.getRoot().findViewById(R.id.add_new_list_btn);
         addNewListBtn.setOnClickListener(v -> addList(binding.getRoot()));
 
-        final LinearLayout listsList = binding.getRoot().findViewById(R.id.lists_list);
+        ShoppingListAdapter adapter = new ShoppingListAdapter(new ShoppingListDiffCallback(),
+                new ShoppingListViewHolderOnClickListenerUtils(requireActivity(),
+                        listViewModel, sharedViewModel));
+
+        binding.shoppingListsList.setAdapter(adapter);
 
         listViewModel.getShoppingLists().observe(getViewLifecycleOwner(),
                 shoppingLists -> {
-                    listsList.removeAllViews();
-                    for (ShoppingList data : shoppingLists) {
-                        drawList(data, getContext(), listsList);
+                    if (shoppingLists != null) {
+                        adapter.submitList(shoppingLists);
                     }
                 });
 
@@ -115,113 +114,6 @@ public class MainFragment extends Fragment {
         buzzer.vibrate(VibrationEffect.createWaveform(ListViewModel.BUZZ_PATTERN, -1));
 
         Snackbar.make(snackBarView, listName + " видалено", Snackbar.LENGTH_SHORT).show();
-    }
-
-    private void drawList(final ShoppingList data, Context context, LinearLayout listsList) {
-        final String listName = data.getListName();
-
-        LinearLayout listItem = new LinearLayout(context);
-        listItem.setOrientation(LinearLayout.VERTICAL);
-
-        LinearLayout.LayoutParams listItemParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        listItemParams.topMargin = 10;
-
-        TextView dateCreatedText = new TextView(context);
-        dateCreatedText.setText(data.getTimeCreated());
-        dateCreatedText.setTextSize(20);
-
-        LinearLayout.LayoutParams dateCreatedParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        dateCreatedParams.leftMargin = 10;
-
-        listItem.addView(dateCreatedText, dateCreatedParams);
-
-        RelativeLayout infoGroup = new RelativeLayout(context);
-        infoGroup.setPadding(10, 0, 10, 0);
-
-        final TextView listNameText = new TextView(context);
-        listNameText.setTextSize(35);
-        listNameText.setText(listName);
-        if (data.isCompleted()) {
-            listNameText.setTextColor(Color.GREEN);
-        }
-
-        infoGroup.addView(listNameText, new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        ));
-
-        CheckBox statusCheckBox = new CheckBox(context);
-        statusCheckBox.setEnabled(false);
-        statusCheckBox.setChecked(data.isCompleted());
-        statusCheckBox.setTextSize(35);
-
-        RelativeLayout.LayoutParams checkParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        checkParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-        infoGroup.addView(statusCheckBox, checkParams);
-
-        listItem.addView(infoGroup, new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        ));
-
-        RelativeLayout actionGroup = new RelativeLayout(context);
-        actionGroup.setPadding(0,0,10,0);
-
-        Button delBtn = new Button(context);
-        delBtn.setId(Button.generateViewId());
-        delBtn.setText("x");
-        delBtn.setBackgroundColor(Color.RED);
-
-        RelativeLayout.LayoutParams delBtnParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        delBtnParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-        delBtn.setOnClickListener(v -> {
-            listViewModel.deleteList(data);
-        });
-
-        actionGroup.addView(delBtn, delBtnParams);
-
-        Button showBtn = new Button(context);
-        showBtn.setText("переглянути");
-
-        RelativeLayout.LayoutParams showBtnParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        showBtnParams.rightMargin = 10;
-        showBtnParams.addRule(RelativeLayout.START_OF, delBtn.getId());
-
-        showBtn.setOnClickListener(v -> {
-            ListInfoFragment fragment = new ListInfoFragment();
-
-            sharedViewModel.setListId(data.getId());
-
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.main_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
-
-        actionGroup.addView(showBtn, showBtnParams);
-
-        listItem.addView(actionGroup, new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        ));
-
-        listsList.addView(listItem, listItemParams);
     }
 
     private void addList(View container) {

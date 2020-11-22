@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="listItem"
+            type="edu.chnu.mobidev_native.model.entity.listitem.ListItem" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <CheckBox
+            android:id="@+id/list_item_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:textSize="35sp"
+            app:listItemDescription="@{listItem}"/>
+
+        <TextView
+            android:id="@+id/list_item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBaseline="@id/list_item_description"
+            android:textSize="30sp"
+            tools:ignore="RelativeOverlap"
+            app:listItemPrice="@{listItem}"/>
+
+    </RelativeLayout>
+</layout>
