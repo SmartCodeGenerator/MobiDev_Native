@@ -24,10 +24,8 @@ public class ShoppingListViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(@NonNull ShoppingList item) {
         binding.setShoppingList(item);
+        binding.setOnClickListenerUtils(utils);
         binding.executePendingBindings();
-
-        binding.deleteListButton.setOnClickListener(utils.getDeleteButtonOnClickListener(item));
-        binding.infoListButton.setOnClickListener(utils.getInfoButtonOnClickListener(item));
     }
 
     public static ShoppingListViewHolder from(@NonNull ViewGroup parent,

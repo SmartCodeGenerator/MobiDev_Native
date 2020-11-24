@@ -7,6 +7,9 @@
         <variable
             name="listItem"
             type="edu.chnu.mobidev_native.model.entity.listitem.ListItem" />
+        <variable
+            name="onClickListenerUtils"
+            type="edu.chnu.mobidev_native.util.listitem.ListItemViewHolderOnClickListenerUtils" />
     </data>
 
     <RelativeLayout
@@ -20,7 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:textSize="35sp"
-            app:listItemDescription="@{listItem}"/>
+            app:listItemDescription="@{listItem}"
+            android:onClick="@{onClickListenerUtils.getListItemDescriptionOnClickListener(listItem)}"/>
 
         <TextView
             android:id="@+id/list_item_price"

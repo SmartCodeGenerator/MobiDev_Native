@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.chnu.mobidev_native.view.fragment.about.AboutFragment;
+import edu.chnu.mobidev_native.view.fragment.suggestions.PurchaseSuggestionFragment;
 import edu.chnu.mobidev_native.view.fragment.main.MainFragment;
 import edu.chnu.mobidev_native.R;
 import edu.chnu.mobidev_native.view.fragment.termsofuse.TermsOfUseFragment;
@@ -60,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.terms_of_use_page:
                 transaction.replace(R.id.main_container, new TermsOfUseFragment()).commit();
+                return true;
+            case R.id.ideas_page:
+                transaction.replace(R.id.main_container, new PurchaseSuggestionFragment()).commit();
                 return true;
         }
 

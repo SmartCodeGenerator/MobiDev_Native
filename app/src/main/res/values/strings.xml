@@ -17,14 +17,14 @@
     <string name="desc_label_text">Опис покупки:</string>
     <string name="send_item_created_btn">додати</string>
     <string name="about_header">Purchaser</string>
-    <string name="about_discipline_text">Навчальна дисципліна:<br/>
+    <string name="about_discipline_text">Навчальна дисципліна:<br />
         Розробка мобільних додатків</string>
-    <string name="teacher_name_text">Викладач:<br/>Олександр Валер\&apos;янович Орловський</string>
+    <string name="teacher_name_text">Викладач:<br />Олександр Валер\&apos;янович Орловський</string>
     <string name="project_topic_text">Тема: Перелік покупок (14)</string>
-    <string name="developer_name_text">Розробник:<br/>Митринюк Олександр,<br/>група 444(2)</string>
+    <string name="developer_name_text">Розробник:<br />Митринюк Олександр,<br />група 444(2)</string>
     <string name="project_version_text">Версія: 0.3.0</string>
     <string name="github_link">Посилання на GitHub:
-        <br/>https://github.com/SmartCodeGenerator/Purchaser.git</string>
+        <br />https://github.com/SmartCodeGenerator/Purchaser.git</string>
     <string name="share_list_info_title">Поділитись</string>
     <string name="main_page_title">Головна сторінка</string>
     <string name="about_page_title">Про застосунок</string>
@@ -45,4 +45,7 @@
     <string name="no_lists_text">Створіть список покупок, натиснувши на кнопку ДОДАТИ</string>
     <string name="delete_list_button_text">x</string>
     <string name="show_list_button_text">переглянути</string>
+    <string name="purchase_ideas_text">Ідеї для покупок</string>
+    <string name="ideas_page_text">Ідеї покупок</string>
+    <string name="suggestion_image_text">imageBytes of a suggested item</string>
 </resources>

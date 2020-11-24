@@ -7,6 +7,9 @@
         <variable
             name="shoppingList"
             type="edu.chnu.mobidev_native.model.entity.shoppinglist.ShoppingList" />
+        <variable
+            name="onClickListenerUtils"
+            type="edu.chnu.mobidev_native.util.shoppinglist.ShoppingListViewHolderOnClickListenerUtils" />
     </data>
 
     <LinearLayout
@@ -60,7 +63,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/delete_list_button_text"
                 android:backgroundTint="@color/red"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:onClick="@{onClickListenerUtils.getDeleteButtonOnClickListener(shoppingList)}"/>
 
             <Button
                 android:id="@+id/info_list_button"
@@ -68,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/show_list_button_text"
                 android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@id/delete_list_button" />
+                android:layout_toStartOf="@id/delete_list_button"
+                android:onClick="@{onClickListenerUtils.getInfoButtonOnClickListener(shoppingList)}"/>
 
         </RelativeLayout>
 

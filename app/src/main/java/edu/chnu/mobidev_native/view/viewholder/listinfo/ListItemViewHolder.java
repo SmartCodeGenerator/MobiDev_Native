@@ -24,10 +24,8 @@ public class ListItemViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(@NonNull ListItem item) {
         binding.setListItem(item);
+        binding.setOnClickListenerUtils(utils);
         binding.executePendingBindings();
-
-        binding.listItemDescription
-                .setOnClickListener(utils.getListItemDescriptionOnClickListener(item));
     }
 
     public static ListItemViewHolder from(@NonNull ViewGroup parent,

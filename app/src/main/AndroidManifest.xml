@@ -3,6 +3,7 @@
     package="edu.chnu.mobidev_native">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".appconfig.PurchaserApplication"
