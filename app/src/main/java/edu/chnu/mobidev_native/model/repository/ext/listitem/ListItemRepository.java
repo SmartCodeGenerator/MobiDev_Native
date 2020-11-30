@@ -4,14 +4,10 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
-
 import edu.chnu.mobidev_native.model.dao.ext.listitem.ListItemDao;
-import edu.chnu.mobidev_native.model.dao.ext.shoppinglist.ShoppingListDao;
 import edu.chnu.mobidev_native.model.database.PurchaserDatabase;
 import edu.chnu.mobidev_native.model.entity.listitem.ListItem;
 import edu.chnu.mobidev_native.model.entity.relation.ListWithItems;
-import edu.chnu.mobidev_native.model.entity.shoppinglist.ShoppingList;
 import edu.chnu.mobidev_native.model.repository.BaseRepository;
 
 public class ListItemRepository implements BaseRepository<ListItem> {

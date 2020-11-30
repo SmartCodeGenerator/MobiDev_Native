@@ -1,15 +1,15 @@
 package edu.chnu.mobidev_native.model.entity.suggestion;
 
-public class PurchaseSuggestion {
-    private int id;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    public int getId() {
-        return id;
-    }
+@Entity(tableName = "purchase_suggestion")
+public class PurchaseSuggestionData {
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getName() {
         return name;
@@ -27,6 +27,15 @@ public class PurchaseSuggestion {
         this.price = price;
     }
 
+    @PrimaryKey
+    private int id;
+
+    @ColumnInfo(name = "name")
+    private String name;
+
+    @ColumnInfo(name = "price")
+    private float price;
+
     public String getImageBytes() {
         return imageBytes;
     }
@@ -35,11 +44,10 @@ public class PurchaseSuggestion {
         this.imageBytes = imageBytes;
     }
 
-    private String name;
-    private float price;
+    @ColumnInfo(name = "image")
     private String imageBytes;
 
-    public PurchaseSuggestion(int id, String name, float price, String imageBytes) {
+    public PurchaseSuggestionData(int id, String name, float price, String imageBytes) {
         this.id = id;
         this.name = name;
         this.price = price;

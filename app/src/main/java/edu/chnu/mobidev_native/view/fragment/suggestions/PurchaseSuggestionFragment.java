@@ -37,7 +37,7 @@ public class PurchaseSuggestionFragment extends Fragment {
         PurchaseSuggestionAdapter adapter =
                 new PurchaseSuggestionAdapter(new PurchaseSuggestionDiffCallback());
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.suggestions_list);
+        RecyclerView recyclerView = view.findViewById(R.id.suggestions_list);
         recyclerView.setAdapter(adapter);
 
         viewModel.getPurchaseSuggestions().observe(getViewLifecycleOwner(), suggestions -> {
@@ -45,8 +45,6 @@ public class PurchaseSuggestionFragment extends Fragment {
                 adapter.submitList(suggestions);
             }
         });
-
-        viewModel.fetchSuggestions();
 
         return view;
     }

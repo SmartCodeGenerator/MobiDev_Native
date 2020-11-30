@@ -1,6 +1,8 @@
 package edu.chnu.mobidev_native.model.entity.suggestion;
 
-public class PurchaseSuggestion {
+import com.squareup.moshi.Json;
+
+public class PurchaseSuggestionDTO {
     private int id;
 
     public int getId() {
@@ -37,9 +39,10 @@ public class PurchaseSuggestion {
 
     private String name;
     private float price;
+    @Json(name="image")
     private String imageBytes;
 
-    public PurchaseSuggestion(int id, String name, float price, String imageBytes) {
+    public PurchaseSuggestionDTO(int id, String name, float price, String imageBytes) {
         this.id = id;
         this.name = name;
         this.price = price;
