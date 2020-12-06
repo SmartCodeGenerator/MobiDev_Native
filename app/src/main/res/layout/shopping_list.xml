@@ -16,27 +16,27 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="@dimen/suggestion_name_margin_start">
 
         <TextView
             android:id="@+id/time_list_created"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_marginStart="10dp"
+            android:textSize="@dimen/suggestion_price_text_size"
+            android:layout_marginStart="@dimen/suggestion_name_margin_start"
             app:timeListCreated="@{shoppingList}"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingLeft="@dimen/suggestion_name_margin_start"
+            android:paddingRight="@dimen/suggestion_name_margin_start">
 
             <TextView
                 android:id="@+id/list_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="35sp"
+                android:textSize="@dimen/list_info_total_text_size"
                 tools:ignore="RelativeOverlap"
                 app:listName="@{shoppingList}"/>
 
@@ -44,38 +44,40 @@
                 android:id="@+id/list_completed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="35sp"
+                android:textSize="@dimen/list_info_total_text_size"
                 android:enabled="false"
                 android:layout_alignParentEnd="true"
                 app:listCompleted="@{shoppingList}"/>
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="10dp"
-            tools:ignore="RtlSymmetry">
+            app:singleLine="true"
+            app:singleSelection="true"
+            android:padding="@dimen/spacing_normal"
+            android:layout_gravity="end">
 
-            <Button
-                android:id="@+id/delete_list_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/delete_list_button_text"
-                android:backgroundTint="@color/red"
-                android:layout_alignParentEnd="true"
-                android:onClick="@{onClickListenerUtils.getDeleteButtonOnClickListener(shoppingList)}"/>
-
-            <Button
+            <com.google.android.material.chip.Chip
                 android:id="@+id/info_list_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:chipIcon="@drawable/ic_baseline_navigate_next_24"
                 android:text="@string/show_list_button_text"
-                android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@id/delete_list_button"
+                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:onClick="@{onClickListenerUtils.getInfoButtonOnClickListener(shoppingList)}"/>
 
-        </RelativeLayout>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/delete_list_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipIcon="@drawable/ic_baseline_delete_24"
+                android:text="@string/delete_list_button_text"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:onClick="@{onClickListenerUtils.getDeleteButtonOnClickListener(shoppingList)}"/>
+
+        </com.google.android.material.chip.ChipGroup>
 
     </LinearLayout>
 </layout>

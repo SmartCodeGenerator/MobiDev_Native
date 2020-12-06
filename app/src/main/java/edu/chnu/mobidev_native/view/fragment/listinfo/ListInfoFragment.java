@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,7 +64,7 @@ public class ListInfoFragment extends Fragment {
 
         binding.setListInfoViewModel(viewModel);
 
-        Button addListItemBtn = binding.getRoot().findViewById(R.id.add_list_item_btn);
+        FloatingActionButton addListItemBtn = binding.getRoot().findViewById(R.id.add_list_item_btn);
 
         addListItemBtn.setOnClickListener(v -> {
             AddListItemFragment fragment = new AddListItemFragment();

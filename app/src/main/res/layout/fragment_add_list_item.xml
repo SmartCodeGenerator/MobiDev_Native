@@ -9,36 +9,36 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="@dimen/spacing_normal">
 
         <TextView
             android:id="@+id/add_purchase_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@{listInfoViewModel != null ? listInfoViewModel.listWithItems.shoppingList.listName : "not found"}'
-            android:textSize="45sp"
+            android:textAppearance="?textAppearanceHeadline4"
             android:layout_gravity="center_horizontal"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#000000"
-            android:layout_marginTop="70dp"/>
+            android:layout_height="@dimen/hr_height"
+            android:background="@color/hr_color"
+            android:layout_marginTop="@dimen/hr_margin_top"/>
 
         <TextView
             android:id="@+id/desc_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/desc_label_text"
-            android:textSize="25sp"
-            android:layout_marginTop="100dp"/>
+            android:textSize="@dimen/basic_info_text_size"
+            android:layout_marginTop="@dimen/margin_top_level_2"/>
 
         <EditText
             android:id="@+id/edit_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:layout_marginTop="130dp"
+            android:textSize="@dimen/basic_info_text_size"
+            android:layout_marginTop="@dimen/edit_desc_margin_top"
             android:inputType="text"
             android:importantForAutofill="no"
             tools:ignore="labelFor"/>
@@ -48,16 +48,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/price_label_text"
-            android:textSize="25sp"
-            android:layout_marginTop="200dp"/>
+            android:textSize="@dimen/basic_info_text_size"
+            android:layout_marginTop="@dimen/price_label_margin_top"/>
 
         <EditText
             android:id="@+id/edit_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
+            android:textSize="@dimen/basic_info_text_size"
             android:inputType="numberDecimal"
-            android:layout_marginTop="230dp"
+            android:layout_marginTop="@dimen/edit_price_margin_top"
             android:importantForAutofill="no"
             tools:ignore="labelFor"/>
 
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:text="@string/send_item_created_btn"
             android:layout_gravity="right"
-            android:layout_marginTop="290dp"
+            android:layout_marginTop="@dimen/send_item_created_btn_margin_top"
             tools:ignore="rtlHardCoded"/>
 
     </FrameLayout>

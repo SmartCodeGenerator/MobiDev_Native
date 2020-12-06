@@ -15,14 +15,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="@dimen/spacing_normal">
 
         <CheckBox
             android:id="@+id/list_item_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:textSize="35sp"
+            android:textSize="@dimen/list_info_total_text_size"
+            android:accessibilityLiveRegion="polite"
             app:listItemDescription="@{listItem}"
             android:onClick="@{onClickListenerUtils.getListItemDescriptionOnClickListener(listItem)}"/>
 
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignBaseline="@id/list_item_description"
-            android:textSize="30sp"
+            android:textSize="@dimen/list_item_price_text_size"
             tools:ignore="RelativeOverlap"
             app:listItemPrice="@{listItem}"/>
 

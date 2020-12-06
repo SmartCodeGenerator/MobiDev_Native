@@ -4,44 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.fragment.termsofuse.TermsOfUseFragment"
-    android:paddingLeft="25dp"
-    android:paddingRight="25dp">
+    android:padding="@dimen/spacing_normal">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/terms_of_use_header"
-        android:textSize="50sp"
         android:gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/colorPrimary"/>
+        android:layout_marginTop="@dimen/header_margin_top"
+        android:textAppearance="?textAppearanceHeadline3"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/term1_text"
-        android:textSize="25sp"
-        android:layout_marginTop="170dp"/>
+        android:textSize="@dimen/basic_info_text_size"
+        android:layout_marginTop="@dimen/term1_margin_top"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/term2_text"
-        android:textSize="25sp"
-        android:layout_marginTop="305dp"/>
+        android:textSize="@dimen/basic_info_text_size"
+        android:layout_marginTop="@dimen/term2_margin_top"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/term3_text"
-        android:textSize="25sp"
-        android:layout_marginTop="440dp"/>
+        android:textSize="@dimen/basic_info_text_size"
+        android:layout_marginTop="@dimen/margin_top_level_6"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/term4_text"
-        android:textSize="25sp"
-        android:layout_marginTop="750dp"/>
+        android:textSize="@dimen/basic_info_text_size"
+        android:layout_marginTop="@dimen/term4_margin_top"/>
 
 </FrameLayout>

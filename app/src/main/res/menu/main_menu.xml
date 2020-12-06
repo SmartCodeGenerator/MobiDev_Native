@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/main_page"
         android:title="@string/main_page_title"
@@ -16,4 +17,10 @@
         android:id="@+id/ideas_page"
         android:title="@string/ideas_page_text"
         android:orderInCategory="4" />
+    <item
+        android:id="@+id/dark_theme_menu_item"
+        android:title=""
+        android:orderInCategory="5"
+        app:showAsAction="always"
+        android:actionLayout="@layout/dark_theme_switch"/>
 </menu>

@@ -3,22 +3,29 @@ package edu.chnu.mobidev_native.view.activity.main;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import edu.chnu.mobidev_native.view.fragment.about.AboutFragment;
-import edu.chnu.mobidev_native.view.fragment.suggestions.PurchaseSuggestionFragment;
-import edu.chnu.mobidev_native.view.fragment.main.MainFragment;
 import edu.chnu.mobidev_native.R;
+import edu.chnu.mobidev_native.view.fragment.about.AboutFragment;
+import edu.chnu.mobidev_native.view.fragment.main.MainFragment;
+import edu.chnu.mobidev_native.view.fragment.suggestions.PurchaseSuggestionFragment;
 import edu.chnu.mobidev_native.view.fragment.termsofuse.TermsOfUseFragment;
 import edu.chnu.mobidev_native.viewmodel.util.StartViewModel;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
+
+    private boolean darkThemeSwitchChecked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +44,27 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
+        if (savedInstanceState != null) {
+            darkThemeSwitchChecked = savedInstanceState.getBoolean("SWITCH_CHECKED");
+        }
+
         getLifecycle().addObserver(viewModel);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+
+        MenuItem darkThemeMenuItem = menu.findItem(R.id.dark_theme_menu_item);
+        darkThemeMenuItem.setActionView(R.layout.dark_theme_switch);
+
+        View darkThemeSwitchLayout = darkThemeMenuItem.getActionView();
+        @SuppressLint("UseSwitchCompatOrMaterialCode")
+        Switch darkThemeSwitch = (Switch) darkThemeSwitchLayout
+                .findViewById(R.id.dark_theme_switch);
+        darkThemeSwitch.setChecked(darkThemeSwitchChecked);
+
         return true;
     }
 
@@ -63,11 +85,24 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.main_container, new TermsOfUseFragment()).commit();
                 return true;
             case R.id.ideas_page:
-                transaction.replace(R.id.main_container, new PurchaseSuggestionFragment()).commit();
+                transaction.replace(R.id.main_container, new PurchaseSuggestionFragment())
+                        .addToBackStack(null).commit();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onDarkThemeSwitchClicked(View view) {
+        @SuppressLint("UseSwitchCompatOrMaterialCode")
+        Switch darkThemeSwitch = (Switch) view;
+        darkThemeSwitchChecked = darkThemeSwitch.isChecked();
+
+        if (darkThemeSwitch.isChecked()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     @Override
@@ -104,5 +139,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Timber.i("onDestroy called");
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("SWITCH_CHECKED", darkThemeSwitchChecked);
     }
 }

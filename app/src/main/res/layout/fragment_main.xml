@@ -10,29 +10,30 @@
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="@dimen/spacing_normal">
 
         <EditText
             android:id="@+id/new_list_edit_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_list_edit_text_text"
-            android:textSize="18sp"
+            android:layout_alignStart="@id/add_new_list_btn"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="10dp"
+            android:layout_toStartOf="@+id/add_new_list_btn"
+            android:hint="@string/new_list_edit_text_text"
             android:importantForAutofill="no"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textSize="@dimen/new_list_edit_text_text_size"/>
 
         <Button
             android:id="@+id/add_new_list_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_new_list_btn_text"
-            android:textSize="18sp"
+            android:textSize="@dimen/new_list_edit_text_text_size"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/new_list_edit_text"
-            android:layout_marginStart="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="@dimen/add_new_list_btn_margin_start"
             android:layout_alignBaseline="@id/new_list_edit_text"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -40,18 +41,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/new_list_edit_text"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/header_margin_top"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/no_lists_text"
-            android:textSize="18sp"
+            android:textSize="@dimen/new_list_edit_text_text_size"
             android:visibility="@{listViewModel.noListsMessageVisible}"
             android:layout_below="@id/new_list_edit_text"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginTop="@dimen/header_margin_top"
+            android:layout_marginStart="@dimen/suggestion_name_margin_start"/>
 
     </RelativeLayout>
 </layout>
