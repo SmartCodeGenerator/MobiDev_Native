@@ -37,7 +37,6 @@ import timber.log.Timber;
 public class MainFragment extends Fragment {
 
     private ListViewModel listViewModel;
-    private SharedViewModel sharedViewModel;
 
     public MainFragment() {
         // Required empty public constructor
@@ -79,7 +78,7 @@ public class MainFragment extends Fragment {
 
         binding.setListViewModel(listViewModel);
 
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        SharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         Button addNewListBtn = binding.getRoot().findViewById(R.id.add_new_list_btn);
         addNewListBtn.setOnClickListener(v -> addList(binding.getRoot()));

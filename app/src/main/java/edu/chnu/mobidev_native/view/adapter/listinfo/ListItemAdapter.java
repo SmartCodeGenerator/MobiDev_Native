@@ -12,7 +12,7 @@ import edu.chnu.mobidev_native.view.viewholder.listinfo.ListItemViewHolder;
 
 public class ListItemAdapter extends ListAdapter<ListItem, ListItemViewHolder> {
 
-    private ListItemViewHolderOnClickListenerUtils utils;
+    private final ListItemViewHolderOnClickListenerUtils utils;
 
     public ListItemAdapter(@NonNull ListItemDiffCallback diffCallback,
                               ListItemViewHolderOnClickListenerUtils utils) {

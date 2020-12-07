@@ -13,8 +13,8 @@ import edu.chnu.mobidev_native.model.repository.BaseRepository;
 
 public class ShoppingListRepository implements BaseRepository<ShoppingList> {
 
-    private ShoppingListDao shoppingListDao;
-    private LiveData<List<ShoppingList>> shoppingLists;
+    private final ShoppingListDao shoppingListDao;
+    private final LiveData<List<ShoppingList>> shoppingLists;
 
     public ShoppingListRepository(Application application) {
         PurchaserDatabase database = PurchaserDatabase.getDatabase(application);

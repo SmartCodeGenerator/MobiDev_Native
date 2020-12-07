@@ -55,7 +55,8 @@ public class StartViewModel extends ViewModel implements LifecycleObserver {
             public void run() {
                 secondsCountTotal.setValue(secondsCountTotal.getValue() + 1);
                 Timber.i("Timer (total) is at: %s", secondsCountTotal.getValue());
-                handler.getValue().postDelayed(runnableTotal.getValue(), 1000);
+                Objects.requireNonNull(handler.getValue())
+                        .postDelayed(runnableTotal.getValue(), 1000);
             }
         };
 

@@ -27,6 +27,12 @@ public class PurchaserApplication extends Application implements Configuration.P
         super.onCreate();
         Timber.plant(new Timber.DebugTree());
 
+        Configuration myConfig = new Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.INFO)
+                .build();
+
+        WorkManager.initialize(this, myConfig);
+
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.UNMETERED)
                 .setRequiresBatteryNotLow(true)

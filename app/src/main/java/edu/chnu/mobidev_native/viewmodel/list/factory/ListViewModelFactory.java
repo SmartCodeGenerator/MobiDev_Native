@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.chnu.mobidev_native.model.dao.ext.shoppinglist.ShoppingListDao;
 import edu.chnu.mobidev_native.viewmodel.list.ListViewModel;
 
+@SuppressWarnings("unchecked")
 public class ListViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;

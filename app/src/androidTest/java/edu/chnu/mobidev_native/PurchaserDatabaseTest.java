@@ -52,7 +52,7 @@ public class PurchaserDatabaseTest {
     }
 
     @After
-    public void closeDb() throws IOException {
+    public void closeDb() {
         database.close();
     }
 

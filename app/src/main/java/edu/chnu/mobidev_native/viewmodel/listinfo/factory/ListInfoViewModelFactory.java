@@ -20,6 +20,7 @@ public class ListInfoViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(ListInfoViewModel.class)) {
+            //noinspection unchecked
             return (T) new ListInfoViewModel(application);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
